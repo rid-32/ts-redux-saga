@@ -1,0 +1,12 @@
+{
+  "src/**/*.+(js|jsx|ts|tsx)": [
+    "eslint"
+  ],
+  "*.css": [
+    "stylelint"
+  ],
+  "**/*.+(js|jsx|json|yml|yaml|css|less|scss|md|mdx)": [
+    "prettier --write",
+    "git add"
+  ]
+}
