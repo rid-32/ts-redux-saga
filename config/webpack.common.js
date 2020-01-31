@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -10,15 +11,21 @@ const plugins = [
   new HtmlWebpackPlugin({
     template: path.resolve(__dirname, '../public/index.html'),
   }),
-]
+];
+
+const resolvePlugins = [
+  new TsconfigPathsPlugin({
+    configFile: path.resolve(__dirname, '../tsconfig.json'),
+  }),
+];
 
 const tsLoader = {
   test: /\.(tsx?|jsx?)$/,
   exclude: /node_modules/,
-  use: 'ts-loader'
-}
+  use: 'ts-loader',
+};
 
-const extensions = ['.js', '.jsx', '.ts', '.tsx', '.css']
+const extensions = ['.js', '.jsx', '.ts', '.tsx', '.css'];
 
 module.exports = {
   target: 'web',
@@ -26,13 +33,14 @@ module.exports = {
   output: {
     filename: 'bundle.[hash].js',
     path: path.resolve(__dirname, '../dist'),
-    publicPath: '/'
+    publicPath: '/',
   },
   module: {
-    rules: [tsLoader]
+    rules: [tsLoader],
   },
   resolve: {
     extensions,
+    plugins: resolvePlugins,
   },
   plugins,
-}
+};

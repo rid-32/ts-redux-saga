@@ -1,8 +1,10 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import Home from 'screens/home';
+
 const App: React.SFC = () => {
-  return <h3>Hello, world</h3>;
+  return <Home />;
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));
