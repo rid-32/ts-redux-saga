@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "noImplicitAny": false,
     "module": "esnext",
     "target": "es5",
     "jsx": "react",
@@ -9,7 +8,9 @@
     "sourceMap": true,
     "baseUrl": ".",
     "moduleResolution": "node",
+    "downlevelIteration": true,
     "paths": {
+      "images/*": ["./public/assets/images/*"],
       "*": ["./src/*"]
     },
     "typeRoots": ["node_modules/@types", "./src/@types/**/*"]

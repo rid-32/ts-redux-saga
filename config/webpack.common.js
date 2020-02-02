@@ -6,6 +6,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+const rootAssetPath = path.resolve(__dirname, '../public/assets');
+
 const plugins = [
   new webpack.ProgressPlugin(),
   new HtmlWebpackPlugin({
@@ -22,7 +24,20 @@ const resolvePlugins = [
 const tsLoader = {
   test: /\.(tsx?|jsx?)$/,
   exclude: /node_modules/,
-  use: 'ts-loader',
+  use: {
+    loader: 'ts-loader',
+  },
+};
+
+const fileLoader = {
+  test: /\.(wav|webm|mp3|woff|woff2|ttf|eot|svg|png|jpe?g|gif|ico)(\?.*)?$/i,
+  use: {
+    loader: 'file-loader',
+    options: {
+      name: '[name].[hash].[ext]',
+      context: rootAssetPath,
+    },
+  },
 };
 
 const extensions = ['.js', '.jsx', '.ts', '.tsx', '.css'];
@@ -36,7 +51,7 @@ module.exports = {
     publicPath: '/',
   },
   module: {
-    rules: [tsLoader],
+    rules: [tsLoader, fileLoader],
   },
   resolve: {
     extensions,

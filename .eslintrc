@@ -1,24 +1,29 @@
 {
-    "env": {
-      "browser": true,
-      "commonjs": true,
-      "es6": true
-    },
-    "globals": {
-      "__dirname": true,
-      "process": true,
-    },
-    "extends": ["eslint:recommended", "plugin:react/recommended", "eslint-config-prettier", 'plugin:@typescript-eslint/recommended'],
-    "parser": "@typescript-eslint/parser",
-    "plugins": ["react", "react-hooks", "@typescript-eslint"],
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "rules": {
-      "react/prop-types": "off",
-      "@typescript-eslint/no-var-requires": "off",
-      "@typescript-eslint/no-explicit-any": "off"
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true
+  },
+  "globals": {
+    "__dirname": true,
+    "process": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "eslint-config-prettier",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "react-hooks", "@typescript-eslint"],
+  "settings": {
+    "react": {
+      "version": "detect"
     }
+  },
+  "rules": {
+    "react/prop-types": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-explicit-any": "off"
+  }
 }
