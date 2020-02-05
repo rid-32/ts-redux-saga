@@ -1,17 +1,24 @@
 import React from 'react';
 
-import { greeting } from 'core/index';
-
 import img from 'images/jpg/voron.jpg';
 
-type HomeProps = React.HTMLProps<HTMLElement>;
+type HomePropsType = React.HTMLProps<HTMLElement>;
 
-const Home: React.SFC<HomeProps> = ({ className }) => {
+const Home: React.SFC<HomePropsType> = ({ className }) => {
+  const [title, setTitle] = React.useState('');
+
+  const handleChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>): void => {
+      setTitle(event.target.value);
+    },
+    [setTitle],
+  );
+
   return (
     <div className={className}>
       <img src={img} alt="voron-image" />
 
-      <h3>{greeting('John')}</h3>
+      <input value={title} onChange={handleChange} />
     </div>
   );
 };
