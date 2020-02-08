@@ -3,7 +3,7 @@ import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import reducers from './reducers';
-// import sagas from './sagas';
+import sagas from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -15,6 +15,6 @@ const enhancers = process.env.DEVELOPMENT
 
 const store: ReduxStore<Store.State> = createStore(reducers, enhancers);
 
-// sagas.forEach(saga => sagaMiddleware.run(saga));
+sagas.forEach(saga => sagaMiddleware.run(saga));
 
 export default store;

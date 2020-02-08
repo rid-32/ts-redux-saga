@@ -6,11 +6,11 @@ declare namespace StoreUtils {
     error: E;
   };
 
-  type FetchSagaProps = {
+  type FetchSagaProps<P, E> = {
     type: string;
     apiMethod(any): Promise<any>;
-    handleSuccess?(any): any;
-    handleError?(any): any;
+    handleSuccess?(any): P;
+    handleError?(any): E;
   };
 
   type MetaType = {

@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
-import { put, call } from 'redux-saga/effects';
+import { put, call, takeLatest } from 'redux-saga/effects';
 
-import * as CONST from './consts';
+import * as CONSTS from './consts';
 import { get, isUndefined } from 'utils/tools';
 
 type FetchActionsReturnType<P, E> = {
@@ -12,17 +12,17 @@ type FetchActionsReturnType<P, E> = {
 };
 
 const fetchReducer = <P, E>(
-  state: StoreUtils.FetchState<P, E> = CONST.INITIAL_FETCH_STATE,
+  state: StoreUtils.FetchState<P, E> = CONSTS.INITIAL_FETCH_STATE,
   action: ReduxActions.ActionMeta<P | E, StoreUtils.MetaType>,
 ): StoreUtils.FetchState<P, E> => {
   switch (action.type) {
-    case CONST.STARTED:
+    case CONSTS.STARTED:
       return {
         ...state,
         isFetching: true,
         isFetched: false,
       };
-    case CONST.SUCCESS:
+    case CONSTS.SUCCESS:
       return {
         ...state,
         isFetching: false,
@@ -30,15 +30,15 @@ const fetchReducer = <P, E>(
         payload: action.payload as P,
         error: null,
       };
-    case CONST.FAILURE:
+    case CONSTS.FAILURE:
       return {
         ...state,
         isFetching: false,
         isFetched: true,
         error: action.payload as E,
       };
-    case CONST.CLEAR:
-      return CONST.INITIAL_FETCH_STATE;
+    case CONSTS.CLEAR:
+      return CONSTS.INITIAL_FETCH_STATE;
     default:
       return state;
   }
@@ -59,35 +59,35 @@ export const getFetchReducer = <P, E>(reducerName: string) => (
 export const getFetchActions = <P, E>(
   name: string,
 ): FetchActionsReturnType<P, E> => ({
-  started: createAction<StoreUtils.MetaType>(CONST.STARTED, undefined, () => ({
+  started: createAction<StoreUtils.MetaType>(CONSTS.STARTED, undefined, () => ({
     name,
   })),
   success: createAction<P, StoreUtils.MetaType>(
-    CONST.SUCCESS,
+    CONSTS.SUCCESS,
     undefined,
     () => ({
       name,
     }),
   ),
   failure: createAction<E, StoreUtils.MetaType>(
-    CONST.FAILURE,
+    CONSTS.FAILURE,
     undefined,
     () => ({
       name,
     }),
   ),
-  clear: createAction<StoreUtils.MetaType>(CONST.CLEAR, undefined, () => ({
+  clear: createAction<StoreUtils.MetaType>(CONSTS.CLEAR, undefined, () => ({
     name,
   })),
 });
 
-export const getFetchSaga = ({
+export const getFetchSaga = <P, E>({
   type,
   apiMethod,
   handleSuccess,
   handleError,
-}: StoreUtils.FetchSagaProps) => {
-  const { started, success, failure } = getFetchActions(type);
+}: StoreUtils.FetchSagaProps<P, E>) => {
+  const { started, success, failure } = getFetchActions<P, E>(type);
 
   return function*(action) {
     yield put(started());
@@ -96,18 +96,64 @@ export const getFetchSaga = ({
       const response = yield call(apiMethod, action.payload);
 
       const handledData = handleSuccess
-        ? yield* handleSuccess(response)
-        : response;
+        ? yield handleSuccess(response)
+        : response.data;
 
-      yield put(success(handledData));
+      if (handledData) yield put(success(handledData));
 
       return handledData;
     } catch (error) {
-      const handledError = handleError ? yield* handleError(error) : error;
+      const handledError = handleError ? yield handleError(error) : error;
 
       if (handledError) yield put(failure(handledError));
     }
   };
+};
+
+export function* fetchSaga<P, E>(config: StoreUtils.FetchSagaProps<P, E>) {
+  yield takeLatest(config.type, getFetchSaga<P, E>(config));
+}
+
+export const getDomainSelector = <P, E>(domains: string[]) => (
+  state: Store.State,
+): StoreUtils.FetchState<P, E> =>
+  domains.reduce((acc, domain) => {
+    if (typeof acc === 'object' && domain in acc) return acc[domain];
+
+    return {};
+  }, state);
+
+export const getIsFetchingSelector = (domains: string[]) => (
+  state: Store.State,
+): boolean => {
+  const instanse = getDomainSelector(domains)(state);
+
+  return instanse.isFetching;
+};
+
+export const getIsFetchedSelector = (domains: string[]) => (
+  state: Store.State,
+): boolean => {
+  const instanse = getDomainSelector(domains)(state);
+
+  return instanse.isFetched;
+};
+
+export const getPayloadSelector = <P, D>(
+  domains: string[],
+  defaultValue?: D,
+) => (state: Store.State): P | D => {
+  const instanse = getDomainSelector<P, any>(domains)(state);
+
+  return instanse.payload || defaultValue;
+};
+
+export const getErrorSelector = <E, D>(domains: string[], defaultValue?: D) => (
+  state: Store.State,
+): E | D => {
+  const instanse = getDomainSelector<any, E>(domains)(state);
+
+  return instanse.error || defaultValue;
 };
 
 // export function* startedSaga(action: Store.Action<void>) {

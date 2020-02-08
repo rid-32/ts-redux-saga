@@ -1,5 +1,3 @@
-import { createAction } from 'redux-actions';
-
 import { get } from 'utils/tools';
 
 export const createNamedWrapperReducer = (reducerFunction, reducerName) => (
