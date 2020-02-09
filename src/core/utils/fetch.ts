@@ -4,13 +4,6 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import * as CONSTS from './consts';
 import { get, isUndefined } from 'utils/tools';
 
-type FetchActionsReturnType<P, E> = {
-  started: ReduxActions.ActionFunction0<ReduxActions.BaseAction>;
-  success: ReduxActions.ActionFunction1<P, ReduxActions.Action<P>>;
-  failure: ReduxActions.ActionFunction1<E, ReduxActions.Action<E>>;
-  clear: ReduxActions.ActionFunction0<ReduxActions.BaseAction>;
-};
-
 const fetchReducer = <P, E>(
   state: StoreUtils.FetchState<P, E> = CONSTS.INITIAL_FETCH_STATE,
   action: ReduxActions.ActionMeta<P | E, StoreUtils.MetaType>,
@@ -56,6 +49,13 @@ export const getFetchReducer = <P, E>(reducerName: string) => (
   return fetchReducer<P, E>(state, action);
 };
 
+type FetchActionsReturnType<P, E> = {
+  started: ReduxActions.ActionFunction0<ReduxActions.BaseAction>;
+  success: ReduxActions.ActionFunction1<P, ReduxActions.Action<P>>;
+  failure: ReduxActions.ActionFunction1<E, ReduxActions.Action<E>>;
+  clear: ReduxActions.ActionFunction0<ReduxActions.BaseAction>;
+};
+
 export const getFetchActions = <P, E>(
   name: string,
 ): FetchActionsReturnType<P, E> => ({
@@ -81,15 +81,17 @@ export const getFetchActions = <P, E>(
   })),
 });
 
+type FetchSagaReturnType<P> = (action: ReduxActions.Action<P>) => Iterator<any>;
+
 export const getFetchSaga = <P, E>({
   type,
   apiMethod,
   handleSuccess,
   handleError,
-}: StoreUtils.FetchSagaProps<P, E>) => {
+}: StoreUtils.FetchSagaProps<P, E>): FetchSagaReturnType<P | E> => {
   const { started, success, failure } = getFetchActions<P, E>(type);
 
-  return function*(action) {
+  return function*(action): any {
     yield put(started());
 
     try {
@@ -110,8 +112,42 @@ export const getFetchSaga = <P, E>({
   };
 };
 
-export function* fetchSaga<P, E>(config: StoreUtils.FetchSagaProps<P, E>) {
+export function* fetchSaga<P, E>(
+  config: StoreUtils.FetchSagaProps<P, E>,
+): Iterator<ReturnType<typeof takeLatest>> {
   yield takeLatest(config.type, getFetchSaga<P, E>(config));
+}
+
+export function* startedSaga(
+  action: ReduxActions.BaseAction,
+): Iterator<ReturnType<typeof put>> {
+  const actions = getFetchActions(action.type);
+
+  yield put(actions.started());
+}
+
+export function* successSaga<P>(
+  action: ReduxActions.Action<P>,
+): Iterator<ReturnType<typeof put>> {
+  const actions = getFetchActions<P, any>(action.type);
+
+  yield put(actions.success(action.payload));
+}
+
+export function* failureSaga<E>(
+  action: ReduxActions.Action<E>,
+): Iterator<ReturnType<typeof put>> {
+  const actions = getFetchActions<any, E>(action.type);
+
+  yield put(actions.failure(action.payload));
+}
+
+export function* clearSaga(
+  action: ReduxActions.BaseAction,
+): Iterator<ReturnType<typeof put>> {
+  const actions = getFetchActions(action.type);
+
+  yield put(actions.clear());
 }
 
 export const getDomainSelector = <P, E>(domains: string[]) => (
@@ -155,27 +191,3 @@ export const getErrorSelector = <E, D>(domains: string[], defaultValue?: D) => (
 
   return instanse.error || defaultValue;
 };
-
-// export function* startedSaga(action: Store.Action<void>) {
-//   const actions = getFetchActions(action.type);
-//
-//   yield put(actions.started());
-// }
-//
-// export function* successSaga(action: Store.Action<any>) {
-//   const actions = getFetchActions(action.type);
-//
-//   yield put(actions.success(action.payload));
-// }
-//
-// export function* failureSaga(action: Store.Action<any>) {
-//   const actions = getFetchActions(action.type);
-//
-//   yield put(actions.failure(action.payload));
-// }
-//
-// export function* clearSaga(action: Store.Action<void>) {
-//   const actions = getFetchActions(action.type);
-//
-//   yield put(actions.clear());
-// }

@@ -13,10 +13,7 @@ const Products: React.SFC<ProductsPropsType> = ({ className }) => {
   /* const [title, setTitle] = React.useState(''); */
   const fetchProducts = useBindedAction(fetchProductsAction);
   const isProductsFetching = useSelector(getProductsFetching);
-  const products = useSelector(getProducts);
-
-  console.log({ isProductsFetching });
-  console.log({ products });
+  const products: Store.Product[] = useSelector(getProducts);
 
   React.useEffect(() => {
     fetchProducts();

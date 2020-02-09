@@ -18,6 +18,6 @@ const fetchProductsConfig: StoreUtils.FetchSagaProps<
   },
 };
 
-export default function*() {
+export default function*(): Iterator<ReturnType<typeof fetchSaga>> {
   yield fetchSaga<Store.Product[], boolean>(fetchProductsConfig);
 }
