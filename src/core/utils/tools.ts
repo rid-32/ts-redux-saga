@@ -1,13 +1,24 @@
-import { get } from 'utils/tools';
+import { get, isUndefined } from 'utils/tools';
 
-export const createNamedWrapperReducer = (reducerFunction, reducerName) => (
-  state,
-  action,
-) => {
-  const isInitializationCall = state === undefined;
-  const name = get(action, 'meta.name');
+export const createNamedReducer = <S, P>(
+  reducer: ReduxActions.Reducer<S, P>,
+) => (reducerName: string) => (
+  state: S,
+  action: ReduxActions.ActionMeta<P, StoreUtils.MetaType>,
+): S => {
+  const isInitializationCall = isUndefined(state);
+  const actionName = get(action, 'meta.name');
 
-  if (name !== reducerName && !isInitializationCall) return state;
+  if (actionName !== reducerName && !isInitializationCall) return state;
 
-  return reducerFunction(state, action);
+  return reducer(state, action);
 };
+
+export const createDomainSelector = <S>(domains: string[]) => (
+  state: Store.State,
+): S =>
+  domains.reduce((acc, domain) => {
+    if (typeof acc === 'object' && domain in acc) return acc[domain];
+
+    return {};
+  }, state);

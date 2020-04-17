@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
-import ProducersReducer from './producers/reducers';
-import SellersReducer from './sellers/reducers';
+import { reducersMap as ProducersReducersMap } from './producers';
+import { reducersMap as SellersReducersMap } from './sellers';
 
 export default combineReducers({
-  ...ProducersReducer,
-  ...SellersReducer,
+  ...ProducersReducersMap,
+  ...SellersReducersMap,
 });

@@ -1,3 +1,3 @@
-import producersSaga from './producers/sagas';
+import { saga as producersSaga } from './producers';
 
 export default [producersSaga];

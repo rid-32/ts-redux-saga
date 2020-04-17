@@ -1,5 +1,3 @@
-import { takeLatest } from 'redux-saga/effects';
-
 import { fetchSaga } from 'core/utils/fetch';
 import * as CONSTS from './consts';
 import * as api from 'api/producers';
@@ -18,6 +16,6 @@ const fetchProductsConfig: StoreUtils.FetchSagaProps<
   },
 };
 
-export default function*(): Iterator<ReturnType<typeof fetchSaga>> {
-  yield fetchSaga<Store.Product[], boolean>(fetchProductsConfig);
+export default function*(): ReturnType<typeof fetchSaga> {
+  yield* fetchSaga<Store.Product[], boolean>(fetchProductsConfig);
 }

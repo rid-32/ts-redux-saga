@@ -6,6 +6,12 @@ declare namespace StoreUtils {
     error: E;
   };
 
+  type TableState = {
+    page: number;
+    pageSize: number;
+    total: number;
+  };
+
   type FetchSagaProps<P, E> = {
     type: string;
     apiMethod(any): Promise<any>;
@@ -26,7 +32,10 @@ declare namespace Store {
   };
 
   type ProdusersState = {
-    products: StoreUtils.FetchState<Product[], boolean>;
+    products: {
+      data: StoreUtils.FetchState<Product[], boolean>;
+      table: StoreUtils.TableState;
+    };
   };
 
   type Order = {
