@@ -1,6 +1,5 @@
-import { createAction } from 'redux-actions';
-
 import * as CONSTS from './consts';
+import { createNamedAction } from '../tools';
 
 type FetchActionsReturnType<P, E> = {
   started: ReduxActions.ActionFunction0<ReduxActions.BaseAction>;
@@ -12,24 +11,8 @@ type FetchActionsReturnType<P, E> = {
 export const getFetchActions = <P, E>(
   name: string,
 ): FetchActionsReturnType<P, E> => ({
-  started: createAction<StoreUtils.MetaType>(CONSTS.STARTED, undefined, () => ({
-    name,
-  })),
-  success: createAction<P, StoreUtils.MetaType>(
-    CONSTS.SUCCESS,
-    undefined,
-    () => ({
-      name,
-    }),
-  ),
-  failure: createAction<E, StoreUtils.MetaType>(
-    CONSTS.FAILURE,
-    undefined,
-    () => ({
-      name,
-    }),
-  ),
-  clear: createAction<StoreUtils.MetaType>(CONSTS.CLEAR, undefined, () => ({
-    name,
-  })),
+  started: createNamedAction(CONSTS.STARTED)(name),
+  success: createNamedAction<P>(CONSTS.SUCCESS)(name),
+  failure: createNamedAction<E>(CONSTS.FAILURE)(name),
+  clear: createNamedAction(CONSTS.CLEAR)(name),
 });

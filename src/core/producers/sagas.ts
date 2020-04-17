@@ -2,20 +2,19 @@ import { fetchSaga } from 'core/utils/fetch';
 import * as CONSTS from './consts';
 import * as api from 'api/producers';
 
-const fetchProductsConfig: StoreUtils.FetchSagaProps<
-  Store.Product[],
-  boolean
-> = {
+const fetchProductsConfig = {
   type: CONSTS.FETCH_PRODUCTS,
   apiMethod: api.fetchProducts,
-  handleSuccess: response => {
-    return response.data;
+  handleSuccess: (data: Store.Product[]): Store.Product[] => {
+    return data;
   },
-  handleError: () => {
+  handleError: (): boolean => {
     return true;
   },
 };
 
-export default function*(): ReturnType<typeof fetchSaga> {
-  yield* fetchSaga<Store.Product[], boolean>(fetchProductsConfig);
+export default function* (): ReturnType<typeof fetchSaga> {
+  yield* fetchSaga<Store.Product[], Store.Product[], boolean, void>(
+    fetchProductsConfig,
+  );
 }

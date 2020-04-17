@@ -1,3 +1,5 @@
+import { createAction } from 'redux-actions';
+
 import { get, isUndefined } from 'utils/tools';
 
 export const createNamedReducer = <S, P>(
@@ -22,3 +24,13 @@ export const createDomainSelector = <S>(domains: string[]) => (
 
     return {};
   }, state);
+
+export const createNamedAction = <P>(type: string) => (name: string): any => {
+  return createAction(
+    type,
+    (payload: P): P => payload,
+    () => ({
+      name,
+    }),
+  );
+};

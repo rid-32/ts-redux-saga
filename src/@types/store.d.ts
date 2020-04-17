@@ -12,10 +12,10 @@ declare namespace StoreUtils {
     total: number;
   };
 
-  type FetchSagaProps<P, E> = {
+  type FetchSagaProps<D, P, E, A = void> = {
     type: string;
-    apiMethod(any): Promise<any>;
-    handleSuccess?(any): P;
+    apiMethod(arg0: A): Promise<{ data: D }>;
+    handleSuccess?(arg0: D): P;
     handleError?(any): E;
   };
 

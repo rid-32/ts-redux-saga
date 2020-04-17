@@ -4,22 +4,22 @@ import { getFetchActions } from './actions';
 
 type FetchSagaReturnType<P> = (action: ReduxActions.Action<P>) => Iterator<any>;
 
-export const getFetchSaga = <P, E>({
+export const getFetchSaga = <D, P, E, A = void>({
   type,
   apiMethod,
   handleSuccess,
   handleError,
-}: StoreUtils.FetchSagaProps<P, E>): FetchSagaReturnType<P | E> => {
+}: StoreUtils.FetchSagaProps<D, P, E, A>): FetchSagaReturnType<A> => {
   const { started, success, failure } = getFetchActions<P, E>(type);
 
-  return function*(action): any {
+  return function* (action): any {
     yield put(started());
 
     try {
-      const response = yield call(apiMethod, action.payload);
+      const response: { data: D } = yield call(apiMethod, action.payload);
 
       const handledData = handleSuccess
-        ? yield handleSuccess(response)
+        ? yield handleSuccess(response.data)
         : response.data;
 
       if (handledData) yield put(success(handledData));
@@ -33,10 +33,10 @@ export const getFetchSaga = <P, E>({
   };
 };
 
-export function* fetchSaga<P, E>(
-  config: StoreUtils.FetchSagaProps<P, E>,
+export function* fetchSaga<A, D, P, E>(
+  config: StoreUtils.FetchSagaProps<A, D, P, E>,
 ): Generator<ReturnType<typeof takeLatest>> {
-  yield takeLatest(config.type, getFetchSaga<P, E>(config));
+  yield takeLatest(config.type, getFetchSaga<A, D, P, E>(config));
 }
 
 export function* startedSaga(

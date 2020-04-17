@@ -16,7 +16,7 @@ const products: Store.Product[] = [
   },
 ];
 
-export const fetchProducts = (): Promise<{ data: typeof products }> =>
+export const fetchProducts = (): Promise<{ data: Store.Product[] }> =>
   new Promise((res): void => {
     setTimeout((): void => {
       res({ data: products });
