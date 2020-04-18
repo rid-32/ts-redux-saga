@@ -5,8 +5,8 @@ import { createNamedReducer } from '../tools';
 
 export const getFetchReducer = <P>(
   name: string,
-): ReduxActions.Reducer<StoreUtils.FetchState<P>, P | string> => {
-  type State = StoreUtils.FetchState<P>;
+): ReduxActions.Reducer<Core.FetchState<P>, P | string> => {
+  type State = Core.FetchState<P>;
   type Payload = P | string;
 
   const fetchReducer = handleActions<State, Payload>(

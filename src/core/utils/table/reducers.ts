@@ -3,7 +3,7 @@ import { handleActions } from 'redux-actions';
 import { createNamedReducer } from '../tools';
 import * as CONSTS from './consts';
 
-const tableReducer = handleActions<StoreUtils.TableState, number>(
+const tableReducer = handleActions<Core.TableState, number>(
   {
     [CONSTS.PAGE]: (state, { payload }) => ({
       ...state,
@@ -21,7 +21,6 @@ const tableReducer = handleActions<StoreUtils.TableState, number>(
   CONSTS.INITIAL_TABLE_STATE,
 );
 
-export const getTableReducer = createNamedReducer<
-  StoreUtils.TableState,
-  number
->(tableReducer);
+export const getTableReducer = createNamedReducer<Core.TableState, number>(
+  tableReducer,
+);

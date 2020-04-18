@@ -6,7 +6,7 @@ export const createNamedReducer = <S, P>(
   reducer: ReduxActions.Reducer<S, P>,
 ) => (reducerName: string) => (
   state: S,
-  action: ReduxActions.ActionMeta<P, StoreUtils.MetaType>,
+  action: ReduxActions.ActionMeta<P, Core.MetaType>,
 ): S => {
   const isInitializationCall = isUndefined(state);
   const actionName = get(action, 'meta.name');

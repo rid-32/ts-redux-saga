@@ -1,27 +1,3 @@
-declare namespace StoreUtils {
-  type FetchState<P> = {
-    isFetching: boolean;
-    isFetched: boolean;
-    payload: P;
-    error: string;
-  };
-
-  type TableState = {
-    page: number;
-    pageSize: number;
-    total: number;
-  };
-
-  type FetchSagaProps<A, P> = {
-    type: string;
-    apiMethod(arg0: A): Promise<{ data: P }>;
-  };
-
-  type MetaType = {
-    name: string;
-  };
-}
-
 declare namespace Store {
   type Product = {
     id: string;
@@ -31,8 +7,8 @@ declare namespace Store {
 
   type ProdusersState = {
     products: {
-      data: StoreUtils.FetchState<Product[], boolean>;
-      table: StoreUtils.TableState;
+      data: Core.FetchState<Product[]>;
+      table: Core.TableState;
     };
   };
 
@@ -43,7 +19,7 @@ declare namespace Store {
   };
 
   type SellersState = {
-    orders: StoreUtils.FetchState<Order[], boolean>;
+    orders: Core.FetchState<Order[]>;
   };
 
   type State = {
