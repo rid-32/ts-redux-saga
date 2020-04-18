@@ -1,2 +1,4 @@
-export const ROOT_FORM_NAME = 'sellers';
-export const ORDERS_FROM_NAME = 'orders';
+export const ROOT_INSTANCE = 'sellers';
+export const ORDERS_INSTANCE = 'orders';
+
+export const ORDERS_DOMAIN = `${ROOT_INSTANCE}.${ORDERS_INSTANCE}`;

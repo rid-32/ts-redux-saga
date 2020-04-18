@@ -14,7 +14,7 @@ import * as api from 'api/producers';
 // }
 
 const fetchProductsConfig = {
-  type: CONSTS.FETCH_PRODUCTS,
+  type: CONSTS.PRODUCTS_DATA_DOMAIN,
   apiMethod: api.fetchProducts,
   // apiMethod: fetchProducts,
 };

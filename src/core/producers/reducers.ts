@@ -5,14 +5,14 @@ import { getFetchReducer } from 'core/utils/fetch';
 import { getTableReducer } from 'core/utils/table';
 
 const productsReducer = combineReducers({
-  [CONSTS.DATA_FORM_NAME]: getFetchReducer<Store.Product[]>(
-    CONSTS.FETCH_PRODUCTS,
+  [CONSTS.DATA_INSTANCE]: getFetchReducer<Store.Product[]>(
+    CONSTS.PRODUCTS_DATA_DOMAIN,
   ),
-  [CONSTS.TABLE_FORM_NAME]: getTableReducer(CONSTS.PRODUCTS_TABLE),
+  [CONSTS.TABLE_INSTANCE]: getTableReducer(CONSTS.PRODUCTS_TABLE_DOMAIN),
 });
 
 export default {
-  [CONSTS.ROOT_FORM_NAME]: combineReducers({
-    [CONSTS.PRODUCTS_FORM_NAME]: productsReducer,
+  [CONSTS.ROOT_INSTANCE]: combineReducers({
+    [CONSTS.PRODUCTS_INSTANCE]: productsReducer,
   }),
 };

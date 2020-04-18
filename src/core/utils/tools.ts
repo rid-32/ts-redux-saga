@@ -16,14 +16,17 @@ export const createNamedReducer = <S, P>(
   return reducer(state, action);
 };
 
-export const createDomainSelector = <S>(domains: string[]) => (
+export const createDomainSelector = <S>(domainPath: string) => (
   state: Store.State,
-): S =>
-  domains.reduce((acc, domain) => {
+): S => {
+  const domains = domainPath.split('.');
+
+  return domains.reduce((acc, domain) => {
     if (typeof acc === 'object' && domain in acc) return acc[domain];
 
     return {};
   }, state);
+};
 
 export const createNamedAction = <P>(type: string) => (name: string): any => {
   return createAction(
