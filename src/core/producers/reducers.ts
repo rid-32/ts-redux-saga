@@ -6,7 +6,7 @@ import { getTableReducer } from 'core/utils/table';
 
 const productsReducer = combineReducers({
   [CONSTS.DATA_INSTANCE]: getFetchReducer<Store.Product[]>(
-    CONSTS.PRODUCTS_DATA_DOMAIN,
+    CONSTS.FETCH_PRODUCTS,
   ),
   [CONSTS.TABLE_INSTANCE]: getTableReducer(CONSTS.PRODUCTS_TABLE_DOMAIN),
 });

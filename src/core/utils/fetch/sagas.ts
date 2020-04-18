@@ -11,7 +11,7 @@ type FetchSagaType<P, R> = (
 export const getFetchSaga = <A, P>({
   type,
   apiMethod,
-}: Core.FetchSagaProps<A, P>): FetchSagaType<
+}: Core.FetchSagaConfig<A, P>): FetchSagaType<
   A,
   ReturnType<typeof apiMethod>
 > => {
@@ -31,7 +31,7 @@ export const getFetchSaga = <A, P>({
 };
 
 export function* fetchSaga<A, P>(
-  config: Core.FetchSagaProps<A, P>,
+  config: Core.FetchSagaConfig<A, P>,
 ): Generator<ReturnType<typeof takeLatest>> {
   yield takeLatest(config.type, getFetchSaga<A, P>(config));
 }

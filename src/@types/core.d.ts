@@ -10,7 +10,7 @@ declare namespace Core {
     error: string;
   };
 
-  type FetchSagaProps<A, P> = {
+  type FetchSagaConfig<A, P> = {
     type: string;
     apiMethod(arg0: A): Iterator<any, { data: P }> | Promise<{ data: P }>;
   };
