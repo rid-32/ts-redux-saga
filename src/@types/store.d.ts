@@ -1,9 +1,9 @@
 declare namespace StoreUtils {
-  type FetchState<P, E> = {
+  type FetchState<P> = {
     isFetching: boolean;
     isFetched: boolean;
     payload: P;
-    error: E;
+    error: string;
   };
 
   type TableState = {
@@ -12,11 +12,9 @@ declare namespace StoreUtils {
     total: number;
   };
 
-  type FetchSagaProps<D, P, E, A = void> = {
+  type FetchSagaProps<A, P> = {
     type: string;
-    apiMethod(arg0: A): Promise<{ data: D }>;
-    handleSuccess?(arg0: D): P;
-    handleError?(any): E;
+    apiMethod(arg0: A): Promise<{ data: P }>;
   };
 
   type MetaType = {

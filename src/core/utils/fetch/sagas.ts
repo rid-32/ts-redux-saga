@@ -4,39 +4,29 @@ import { getFetchActions } from './actions';
 
 type FetchSagaReturnType<P> = (action: ReduxActions.Action<P>) => Iterator<any>;
 
-export const getFetchSaga = <D, P, E, A = void>({
+export const getFetchSaga = <A, P>({
   type,
   apiMethod,
-  handleSuccess,
-  handleError,
-}: StoreUtils.FetchSagaProps<D, P, E, A>): FetchSagaReturnType<A> => {
-  const { started, success, failure } = getFetchActions<P, E>(type);
+}: StoreUtils.FetchSagaProps<A, P>): FetchSagaReturnType<A> => {
+  const { started, success, failure } = getFetchActions<P>(type);
 
   return function* (action): any {
     yield put(started());
 
     try {
-      const response: { data: D } = yield call(apiMethod, action.payload);
+      const response: { data: P } = yield call(apiMethod, action.payload);
 
-      const handledData = handleSuccess
-        ? yield handleSuccess(response.data)
-        : response.data;
-
-      if (handledData) yield put(success(handledData));
-
-      return handledData;
+      yield put(success(response.data));
     } catch (error) {
-      const handledError = handleError ? yield handleError(error) : error;
-
-      if (handledError) yield put(failure(handledError));
+      yield put(failure(error.message));
     }
   };
 };
 
-export function* fetchSaga<A, D, P, E>(
-  config: StoreUtils.FetchSagaProps<A, D, P, E>,
+export function* fetchSaga<A, P>(
+  config: StoreUtils.FetchSagaProps<A, P>,
 ): Generator<ReturnType<typeof takeLatest>> {
-  yield takeLatest(config.type, getFetchSaga<A, D, P, E>(config));
+  yield takeLatest(config.type, getFetchSaga<A, P>(config));
 }
 
 export function* startedSaga(
@@ -50,15 +40,15 @@ export function* startedSaga(
 export function* successSaga<P>(
   action: ReduxActions.Action<P>,
 ): Iterator<ReturnType<typeof put>> {
-  const actions = getFetchActions<P, any>(action.type);
+  const actions = getFetchActions<P>(action.type);
 
   yield put(actions.success(action.payload));
 }
 
-export function* failureSaga<E>(
-  action: ReduxActions.Action<E>,
+export function* failureSaga(
+  action: ReduxActions.Action<string>,
 ): Iterator<ReturnType<typeof put>> {
-  const actions = getFetchActions<any, E>(action.type);
+  const actions = getFetchActions<any>(action.type);
 
   yield put(actions.failure(action.payload));
 }

@@ -5,7 +5,7 @@ import { getFetchReducer } from 'core/utils/fetch';
 import { getTableReducer } from 'core/utils/table';
 
 const productsReducer = combineReducers({
-  [CONSTS.DATA_FORM_NAME]: getFetchReducer<Store.Product[], boolean>(
+  [CONSTS.DATA_FORM_NAME]: getFetchReducer<Store.Product[]>(
     CONSTS.FETCH_PRODUCTS,
   ),
   [CONSTS.TABLE_FORM_NAME]: getTableReducer(CONSTS.PRODUCTS_TABLE),

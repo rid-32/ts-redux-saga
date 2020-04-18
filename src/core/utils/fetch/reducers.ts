@@ -3,11 +3,11 @@ import { handleActions } from 'redux-actions';
 import * as CONSTS from './consts';
 import { createNamedReducer } from '../tools';
 
-export const getFetchReducer = <P, E>(
+export const getFetchReducer = <P>(
   name: string,
-): ReduxActions.Reducer<StoreUtils.FetchState<P, E>, P | E> => {
-  type State = StoreUtils.FetchState<P, E>;
-  type Payload = P | E;
+): ReduxActions.Reducer<StoreUtils.FetchState<P>, P | string> => {
+  type State = StoreUtils.FetchState<P>;
+  type Payload = P | string;
 
   const fetchReducer = handleActions<State, Payload>(
     {
@@ -27,7 +27,7 @@ export const getFetchReducer = <P, E>(
         ...state,
         isFetching: false,
         isFetched: true,
-        error: payload as E,
+        error: payload as string,
       }),
       [CONSTS.CLEAR]: () => CONSTS.INITIAL_FETCH_STATE,
     },
