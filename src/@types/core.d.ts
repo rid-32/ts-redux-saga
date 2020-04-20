@@ -26,5 +26,19 @@ declare namespace Core {
     page: number;
     pageSize: number;
     total: number;
+    sort: string;
+  };
+
+  type TableActionsReturnType = {
+    changePage: (arg0: number) => ReduxActions.Action<number>;
+    changePageSize: (arg0: number) => ReduxActions.Action<number>;
+    changeTotal: (arg0: number) => ReduxActions.Action<number>;
+    changeSort: (arg0: string) => ReduxActions.Action<string>;
+  };
+
+  type TableQueryType = {
+    limit: number;
+    offset: number;
+    sort: string;
   };
 }

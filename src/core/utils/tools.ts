@@ -28,7 +28,7 @@ export const createDomainSelector = <S>(domainPath: string) => (
   }, state);
 };
 
-export const createNamedAction = <P>(type: string) => (name: string): any => {
+export const createNamedAction = <P>(type: string, name: string): any => {
   return createAction(
     type,
     (payload: P): P => payload,

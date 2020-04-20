@@ -3,19 +3,23 @@ import { handleActions } from 'redux-actions';
 import { createNamedReducer } from '../tools';
 import * as CONSTS from './consts';
 
-const tableReducer = handleActions<Core.TableState, number>(
+const tableReducer = handleActions<Core.TableState, number | string>(
   {
-    [CONSTS.PAGE]: (state, { payload }) => ({
+    [CONSTS.CHANGE_PAGE]: (state, { payload }) => ({
       ...state,
-      page: payload,
+      page: payload as number,
     }),
-    [CONSTS.PAGE_SIZE]: (state, { payload }) => ({
+    [CONSTS.CHANGE_PAGE_SIZE]: (state, { payload }) => ({
       ...state,
-      pageSize: payload,
+      pageSize: payload as number,
     }),
-    [CONSTS.TOTAL]: (state, { payload }) => ({
+    [CONSTS.CHANGE_TOTAL]: (state, { payload }) => ({
       ...state,
-      total: payload,
+      total: payload as number,
+    }),
+    [CONSTS.CHANGE_SORT]: (state, { payload }) => ({
+      ...state,
+      sort: payload as string,
     }),
   },
   CONSTS.INITIAL_TABLE_STATE,
