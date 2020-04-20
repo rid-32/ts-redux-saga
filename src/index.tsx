@@ -6,7 +6,7 @@ import store from 'core/store';
 
 import Products from 'screens/products';
 
-const App: React.SFC = () => {
+const App: React.FC = () => {
   return (
     <Provider store={store}>
       <Products />

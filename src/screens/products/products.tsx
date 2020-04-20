@@ -6,9 +6,9 @@ import { useProductsFetchingEffect } from './hooks';
 
 import img from 'images/jpg/voron.jpg';
 
-type ProductsPropsType = React.HTMLProps<HTMLElement>;
+type ProductsProps = React.HTMLProps<HTMLElement>;
 
-const Products: React.SFC<ProductsPropsType> = ({ className }) => {
+const Products: React.FC<ProductsProps> = ({ className }) => {
   const isProductsFetching = useSelector(getProductsFetching);
   const products = useSelector(getProducts);
 
