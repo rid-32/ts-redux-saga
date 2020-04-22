@@ -6,10 +6,7 @@ declare namespace Store {
   };
 
   type ProdusersState = {
-    products: {
-      data: Core.FetchState<Product[]>;
-      table: Core.TableState;
-    };
+    products: Core.DataTableState<Product[]>;
   };
 
   type Order = {
