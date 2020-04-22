@@ -6,7 +6,7 @@ import {
   getTableTotalSelector,
   getTableSortSelector,
   getTablePagesSelector,
-  getTableQueryParams,
+  getTableQueryParamsSelector,
 } from './selectors';
 
 export {
@@ -17,5 +17,5 @@ export {
   getTableTotalSelector,
   getTableSortSelector,
   getTablePagesSelector,
-  getTableQueryParams,
+  getTableQueryParamsSelector,
 };

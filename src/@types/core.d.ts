@@ -10,17 +10,24 @@ declare namespace Core {
     error: string;
   };
 
+  type FetchReturnType<P> = Iterator<any, { data: P }> | Promise<{ data: P }>;
+
   type FetchSagaConfig<A, P> = {
     type: string;
-    apiMethod(arg0: A): Iterator<any, { data: P }> | Promise<{ data: P }>;
+    apiMethod(arg0: A): FetchReturnType<P>;
   };
 
   type FetchActionsReturnType<P> = {
-    started: () => ReduxActions.BaseAction;
-    success: (arg0: P) => ReduxActions.Action<P>;
-    failure: (arg0: string) => ReduxActions.Action<string>;
-    clear: () => ReduxActions.BaseAction;
+    started(): ReduxActions.BaseAction;
+    success(arg0: P): ReduxActions.Action<P>;
+    failure(arg0: string): ReduxActions.Action<string>;
+    clear(): ReduxActions.BaseAction;
   };
+
+  type IsFetchingSelector = (arg0: Store.State) => boolean;
+  type IsFetchedSelector = (arg0: Store.State) => boolean;
+  type PayloadSelector<P> = (arg0: Store.State) => P;
+  type ErrorSelector = (arg0: Store.State) => string;
 
   type TableState = {
     page: number;
@@ -41,4 +48,32 @@ declare namespace Core {
     offset: number;
     sort: string;
   };
+
+  type DataTableState<P> = {
+    data: FetchState<P>;
+    table: TableState;
+  };
+
+  type DataTableActionsReturnType = {
+    fetch(): ReduxActions.BaseAction;
+    changePage(arg0: number): ReduxActions.Action<number>;
+    changePageAndFetch(arg0: number): ReduxActions.Action<number>;
+    changePageSizeAndFetch(arg0: number): ReduxActions.Action<number>;
+    changeSortAndFetch(arg0: string): ReduxActions.Action<string>;
+  };
+
+  type DataTableApiMethod<P> = (arg0: TableQueryType) => FetchReturnType<P>;
+
+  type DataTableConfig<P> = {
+    type: string;
+    domain: string;
+    apiMethod: DataTableApiMethod<P>;
+  };
+
+  type TablePageSelector = (arg0: Store.State) => number;
+  type TablePageSizeSelector = (arg0: Store.State) => number;
+  type TableTotalSelector = (arg0: Store.State) => number;
+  type TableSortSelector = (arg0: Store.State) => string;
+  type TablePagesSelector = (arg0: Store.State) => number;
+  type TableQueryParamsSelector = (arg0: Store.State) => TableQueryType;
 }

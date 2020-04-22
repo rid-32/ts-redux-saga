@@ -1,18 +1,12 @@
 import { combineReducers } from 'redux';
 
 import * as CONSTS from './consts';
-import { getFetchReducer } from 'core/utils/fetch';
-import { getTableReducer } from 'core/utils/table';
-
-const productsReducer = combineReducers({
-  [CONSTS.DATA_INSTANCE]: getFetchReducer<Store.Product[]>(
-    CONSTS.FETCH_PRODUCTS,
-  ),
-  [CONSTS.TABLE_INSTANCE]: getTableReducer(CONSTS.PRODUCTS_TABLE_DOMAIN),
-});
+import { getDataTableReducer } from 'core/utils/dataTable';
 
 export default {
   [CONSTS.ROOT_INSTANCE]: combineReducers({
-    [CONSTS.PRODUCTS_INSTANCE]: productsReducer,
+    [CONSTS.PRODUCTS_INSTANCE]: getDataTableReducer<Store.Product[]>(
+      CONSTS.FETCH_PRODUCTS,
+    ),
   }),
 };

@@ -2,9 +2,9 @@ import { put, takeLatest } from 'redux-saga/effects';
 
 import { getFetchActions } from './actions';
 
-type FetchSagaReturnType<R> = Iterator<ReturnType<typeof put> | R>;
+export type FetchSagaReturnType<R> = Iterator<ReturnType<typeof put> | R>;
 
-type FetchSagaType<P, R> = (
+export type FetchSagaType<P, R> = (
   action: ReduxActions.Action<P>,
 ) => FetchSagaReturnType<R>;
 

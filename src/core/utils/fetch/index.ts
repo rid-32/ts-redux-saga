@@ -7,6 +7,8 @@ import {
   successSaga,
   failureSaga,
   clearSaga,
+  FetchSagaReturnType,
+  FetchSagaType,
 } from './sagas';
 import {
   getIsFetchingSelector,
@@ -28,4 +30,6 @@ export {
   getIsFetchedSelector,
   getPayloadSelector,
   getErrorSelector,
+  FetchSagaType,
+  FetchSagaReturnType,
 };

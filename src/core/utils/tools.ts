@@ -2,6 +2,9 @@ import { createAction } from 'redux-actions';
 
 import { get, isUndefined } from 'utils/tools';
 
+export const getActionName = (action: ReduxActions.Action<any>): string =>
+  get(action, 'meta.name', '');
+
 export const createNamedReducer = <S, P>(
   reducer: ReduxActions.Reducer<S, P>,
 ) => (reducerName: string) => (
@@ -9,7 +12,7 @@ export const createNamedReducer = <S, P>(
   action: ReduxActions.ActionMeta<P, Core.MetaType>,
 ): S => {
   const isInitializationCall = isUndefined(state);
-  const actionName = get(action, 'meta.name');
+  const actionName = getActionName(action);
 
   if (actionName !== reducerName && !isInitializationCall) return state;
 

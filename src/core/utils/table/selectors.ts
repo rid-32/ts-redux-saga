@@ -41,7 +41,7 @@ export const getTablePagesSelector = (domainPath: string) => (
   return Math.ceil(total / pageSize);
 };
 
-export const getTableQueryParams = (domainPath: string) => (
+export const getTableQueryParamsSelector = (domainPath: string) => (
   state: Store.State,
 ): Core.TableQueryType => {
   const page = getTablePageSelector(domainPath)(state);

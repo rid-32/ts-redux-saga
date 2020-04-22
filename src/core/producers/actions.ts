@@ -1,5 +1,4 @@
-import { createAction } from 'redux-actions';
-
 import * as CONSTS from './consts';
+import { getDataTableActions } from 'core/utils/dataTable';
 
-export const fetchProducts = createAction(CONSTS.FETCH_PRODUCTS);
+export const productsTableActions = getDataTableActions(CONSTS.FETCH_PRODUCTS);

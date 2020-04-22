@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { useBindedAction } from 'utils/hooks';
-import { fetchProducts as fetchProductsAction } from 'core/producers/actions';
+import { productsTableActions } from 'core/producers/actions';
 
 export const useProductsFetchingEffect = (): void => {
-  const fetchProducts = useBindedAction(fetchProductsAction);
+  const fetchProducts = useBindedAction(productsTableActions.fetch);
 
   React.useEffect(() => {
     fetchProducts();
