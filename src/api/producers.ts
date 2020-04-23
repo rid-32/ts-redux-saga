@@ -16,9 +16,11 @@ const products: Store.Product[] = [
   },
 ];
 
-export const fetchProducts = (): Promise<{ data: Store.Product[] }> =>
+export const fetchProducts = (): Promise<
+  Core.DataTableFetchReturnData<Store.Product[]>
+> =>
   new Promise((res): void => {
     setTimeout((): void => {
-      res({ data: products });
+      res({ data: { data: products, total: products.length } });
     }, 2000);
   });

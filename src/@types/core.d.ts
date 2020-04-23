@@ -10,11 +10,12 @@ declare namespace Core {
     error: string;
   };
 
-  type FetchReturnType<P> = Iterator<any, { data: P }> | Promise<{ data: P }>;
+  type FetchReturnData<P> = { data: P };
+  type FetchReturnType<P> = Iterator<any, P> | Promise<P>;
 
   type FetchSagaConfig<A, P> = {
     type: string;
-    apiMethod(arg0: A): FetchReturnType<P>;
+    apiMethod(arg0: A): FetchReturnType<FetchReturnData<P>>;
   };
 
   type FetchActionsReturnType<P> = {
@@ -62,7 +63,18 @@ declare namespace Core {
     changeSortAndFetch(arg0: string): ReduxActions.Action<string>;
   };
 
-  type DataTableApiMethod<P> = (arg0: TableQueryType) => FetchReturnType<P>;
+  type DataTableFetchReturnData<P> = FetchReturnData<{
+    data: P;
+    total: number;
+  }>;
+
+  type DataTableFetchReturnType<P> = FetchReturnType<
+    DataTableFetchReturnData<P>
+  >;
+
+  type DataTableApiMethod<P> = (
+    arg0: TableQueryType,
+  ) => DataTableFetchReturnType<P>;
 
   type DataTableConfig<P> = {
     type: string;

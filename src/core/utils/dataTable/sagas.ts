@@ -11,9 +11,23 @@ type TableSagasReturnType<P> = FetchSagaReturnType<
 
 const getTableFetchSaga = <P>(config: Core.DataTableConfig<P>) => {
   return function* (): TableSagasReturnType<P> {
+    function* fetchMethod(
+      payload: Core.TableQueryType,
+    ): Iterator<any, { data: P }> {
+      const {
+        data: { data, total },
+      }: Core.DataTableFetchReturnData<P> = yield config.apiMethod(payload);
+
+      const tableActions = getTableActions(config.type);
+
+      yield put(tableActions.changeTotal(total));
+
+      return { data };
+    }
+
     const fetchConfig: Core.FetchSagaConfig<Core.TableQueryType, P> = {
       type: config.type,
-      apiMethod: config.apiMethod,
+      apiMethod: fetchMethod,
     };
 
     const queryParams: Core.TableQueryType = yield select(
