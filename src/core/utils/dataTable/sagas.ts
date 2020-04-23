@@ -13,7 +13,7 @@ const getTableFetchSaga = <P>(config: Core.DataTableConfig<P>) => {
   return function* (): TableSagasReturnType<P> {
     function* fetchMethod(
       payload: Core.TableQueryType,
-    ): Iterator<any, { data: P }> {
+    ): Iterator<any, Core.FetchReturnData<P>> {
       const {
         data: { data, total },
       }: Core.DataTableFetchReturnData<P> = yield config.apiMethod(payload);
@@ -61,6 +61,25 @@ const getChangePageAndFetchSaga = <P>(config: Core.DataTableConfig<P>) => {
   };
 };
 
+const getChangePageSizeSaga = <P>(config: Core.DataTableConfig<P>) => {
+  return function* (
+    action: ReduxActions.ActionMeta<number | string, Core.MetaType>,
+  ): Iterator<ReturnType<typeof put>> {
+    const tableActions = getTableActions(config.type);
+
+    yield put(tableActions.changePageSize(action.payload as number));
+  };
+};
+
+const getChangePageSizeAndFetchSaga = <P>(config: Core.DataTableConfig<P>) => {
+  return function* (
+    action: ReduxActions.ActionMeta<number | string, Core.MetaType>,
+  ): TableSagasReturnType<P> {
+    yield getChangePageSizeSaga(config)(action);
+    yield getTableFetchSaga(config)();
+  };
+};
+
 export function* dataTableSaga<P>(
   config: Core.DataTableConfig<P>,
 ): Generator<ReturnType<typeof takeLatest>> {
@@ -78,6 +97,12 @@ export function* dataTableSaga<P>(
         break;
       case CONSTS.CHANGE_PAGE_AND_FETCH:
         yield getChangePageAndFetchSaga(config)(action);
+        break;
+      case CONSTS.CHANGE_PAGE_SIZE:
+        yield getChangePageSizeSaga(config)(action);
+        break;
+      case CONSTS.CHANGE_PAGE_SIZE_AND_FETCH:
+        yield getChangePageSizeAndFetchSaga(config)(action);
         break;
     }
   });
